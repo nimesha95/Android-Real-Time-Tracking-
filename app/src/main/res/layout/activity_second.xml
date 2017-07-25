@@ -12,9 +12,17 @@
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="118dp"
-        android:text="You made it"
+        android:layout_marginTop="55dp"
         android:textSize="30sp"
         tools:layout_editor_absoluteX="112dp"
         tools:layout_editor_absoluteY="128dp" />
+
+    <Button
+        android:id="@+id/naviBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Navigate"
+        android:layout_below="@+id/textView1"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="94dp" />
 </RelativeLayout>
