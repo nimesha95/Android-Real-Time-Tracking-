@@ -7,9 +7,12 @@
     tools:context="com.example.nimesha.delivery.SecondActivity">
 
     <TextView
-        android:id="@+id/textView"
+        android:id="@+id/textView1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="118dp"
         android:text="You made it"
         android:textSize="30sp"
         tools:layout_editor_absoluteX="112dp"
