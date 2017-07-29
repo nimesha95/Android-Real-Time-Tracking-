@@ -2,8 +2,8 @@ package com.example.nimesha.delivery;
 
 import android.content.Intent;
 import android.net.Uri;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -64,6 +64,9 @@ public class SecondActivity extends AppCompatActivity {
             public void onDataChange(DataSnapshot dataSnapshot) {
                 // This method is called once with the initial value and again
                 // whenever data at this location is updated.
+
+                radiogroup.clearCheck();    //this clears the radiogroup everytime datachanges to that it don't duplicate
+                radiogroup.removeAllViews();
 
                 final List<String> jobs = new ArrayList<String>(); //get all the children of the curjob table
                 int count=0;
