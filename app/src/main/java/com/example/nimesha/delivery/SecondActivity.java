@@ -11,6 +11,7 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -43,6 +44,7 @@ public class SecondActivity extends AppCompatActivity {
 
         text1 = (TextView) findViewById(R.id.textView1);
         Button naviagteBtn=(Button) findViewById(R.id.naviBtn);
+        Button signoutbtn = (Button) findViewById(R.id.signoutbtn);
 
         naviagteBtn.setOnClickListener(
                 new Button.OnClickListener() {
@@ -52,12 +54,22 @@ public class SecondActivity extends AppCompatActivity {
                 }
         );
 
+        signoutbtn.setOnClickListener(
+                new Button.OnClickListener() {
+                    public void onClick(View v) {
+                        FirebaseAuth.getInstance().signOut();
+                        Log.d(TAG, "User signed out");
+                        Intent intent = new Intent(SecondActivity.this, MainActivity.class);
+                        startActivity(intent);
+                    }
+                }
+        );
+
     }
 
     @Override
     protected void onStart(){
         super.onStart();
-        // Read from the database
 
         myRef.addValueEventListener(new ValueEventListener() {
             @Override
@@ -95,41 +107,6 @@ public class SecondActivity extends AppCompatActivity {
                 Log.w(TAG, "Failed to read value.", error.toException());
             }
         });
-/*
-        latitude.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                // This method is called once with the initial value and again
-                // whenever data at this location is updated.
-                Double value = dataSnapshot.getValue(Double.TYPE);
-                lati = value;
-                Log.d(TAG, "latitude is: " + value);
-            }
-
-            @Override
-            public void onCancelled(DatabaseError error) {
-                // Failed to read value
-                Log.w(TAG, "Failed to read value.", error.toException());
-            }
-        });
-
-        longitude.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                // This method is called once with the initial value and again
-                // whenever data at this location is updated.
-                Double value = dataSnapshot.getValue(Double.TYPE);
-                longi= value;
-                Log.d(TAG, "longitude is: " + value);
-            }
-
-            @Override
-            public void onCancelled(DatabaseError error) {
-                // Failed to read value
-                Log.w(TAG, "Failed to read value.", error.toException());
-            }
-        });
-    */
     }
 
     public void clickaway(){
