@@ -40,7 +40,11 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
                 FirebaseUser user = firebaseAuth.getCurrentUser();
-                if (user != null) {
+                if (user != null) { //goes to second activity if user is already logged in
+
+                    Intent intent = new Intent(MainActivity.this, SecondActivity.class);
+                    startActivity(intent);
+
                     Log.d(TAG, "onAuthStateChanged:signed_in:" + user.getUid());
                 } else {
                     // User is signed out
@@ -76,6 +80,13 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void signIN(final String email, String password){
+        if(email.length()==0 || password.length()==0){
+            Log.w(TAG, "signInWithEmail:failure No inputs");
+            Toast.makeText(MainActivity.this, "Enter valid email/password",
+                    Toast.LENGTH_SHORT).show();
+            return;
+        }
+
         mAuth.signInWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
@@ -87,6 +98,9 @@ public class MainActivity extends AppCompatActivity {
                             startActivity(intent);
 
                             FirebaseUser user = mAuth.getCurrentUser();
+                            Log.d(TAG, user.getEmail());
+
+
                         } else {
                             // If sign in fails, display a message to the user.
                             Log.w(TAG, "signInWithEmail:failure", task.getException());
@@ -101,10 +115,4 @@ public class MainActivity extends AppCompatActivity {
                     }
                 });
     }
-
-    public void goNext(View view){
-
-    }
-
-
 }

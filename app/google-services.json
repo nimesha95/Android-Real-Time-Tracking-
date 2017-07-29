@@ -8,50 +8,6 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:360796617326:android:782d5be800a77fc4",
-        "android_client_info": {
-          "package_name": "com.example.nimesha.myapplication"
-        }
-      },
-      "oauth_client": [
-        {
-          "client_id": "360796617326-qmilsngl1es1fqukkjhqq5ihnm2qsh3m.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.example.nimesha.myapplication",
-            "certificate_hash": "6def36b5edbace9e17f8ef982a09b4e98b6ea2b0"
-          }
-        },
-        {
-          "client_id": "360796617326-5ui6vtt66d419th7vretjktjj1haom2t.apps.googleusercontent.com",
-          "client_type": 3
-        }
-      ],
-      "api_key": [
-        {
-          "current_key": "AIzaSyDAWP0qB3HRQt7ahn2NXAEd9_h631cZWug"
-        }
-      ],
-      "services": {
-        "analytics_service": {
-          "status": 1
-        },
-        "appinvite_service": {
-          "status": 2,
-          "other_platform_oauth_client": [
-            {
-              "client_id": "360796617326-5ui6vtt66d419th7vretjktjj1haom2t.apps.googleusercontent.com",
-              "client_type": 3
-            }
-          ]
-        },
-        "ads_service": {
-          "status": 2
-        }
-      }
-    },
-    {
-      "client_info": {
         "mobilesdk_app_id": "1:360796617326:android:bf5f2bdcda07cb30",
         "android_client_info": {
           "package_name": "com.example.nimesha.delivery"
