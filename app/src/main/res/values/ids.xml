@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <item name="logoView" type="id"/>
+    <item name="masked" type="id"/>
+</resources>

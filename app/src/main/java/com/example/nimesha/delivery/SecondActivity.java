@@ -7,6 +7,8 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 
 import com.google.firebase.database.DataSnapshot;
@@ -15,6 +17,9 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class SecondActivity extends AppCompatActivity {
 
     private static final String TAG = "Database1";
@@ -22,16 +27,19 @@ public class SecondActivity extends AppCompatActivity {
     TextView text1;
     Double lati;
     Double longi;
+    RadioGroup radiogroup;
 
     FirebaseDatabase database = FirebaseDatabase.getInstance();
-    DatabaseReference myRef = database.getReference("condition");
-    DatabaseReference latitude = database.getReference("lat");
-    DatabaseReference longitude = database.getReference("long");
+    DatabaseReference myRef = database.getReference().child("curjobs");
+    //DatabaseReference latitude = database.getReference("lat");
+    //DatabaseReference longitude = database.getReference("long");
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_second);
+
+        radiogroup = (RadioGroup) findViewById(R.id.radioGrp);
 
         text1 = (TextView) findViewById(R.id.textView1);
         Button naviagteBtn=(Button) findViewById(R.id.naviBtn);
@@ -56,9 +64,26 @@ public class SecondActivity extends AppCompatActivity {
             public void onDataChange(DataSnapshot dataSnapshot) {
                 // This method is called once with the initial value and again
                 // whenever data at this location is updated.
-                String value = dataSnapshot.getValue(String.class);
-                text1.setText("Location: "+ value);
-                Log.d(TAG, "Location is: " + value);
+
+                final List<String> jobs = new ArrayList<String>(); //get all the children of the curjob table
+                int count=0;
+                for (DataSnapshot jobSnap: dataSnapshot.getChildren()) {
+
+                    Double lat = jobSnap.child("lat").getValue(Double.TYPE);
+                    Double longi =jobSnap.child("long").getValue(Double.TYPE);
+                    Log.d(TAG, lat+" "+longi);
+
+                    RadioButton radioButton = new RadioButton(SecondActivity.this);
+                    radioButton.setLayoutParams
+                            (new RadioGroup.LayoutParams
+                                    (RadioGroup.LayoutParams.WRAP_CONTENT, RadioGroup.LayoutParams.WRAP_CONTENT));
+                    radioButton.setText("Radio Button #" + lat);
+                    radioButton.setId(count);
+
+                    //add it to the group.
+                    radiogroup.addView(radioButton, count);
+                    count += 1 ;
+                }
             }
 
             @Override
@@ -67,7 +92,7 @@ public class SecondActivity extends AppCompatActivity {
                 Log.w(TAG, "Failed to read value.", error.toException());
             }
         });
-
+/*
         latitude.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -101,6 +126,7 @@ public class SecondActivity extends AppCompatActivity {
                 Log.w(TAG, "Failed to read value.", error.toException());
             }
         });
+    */
     }
 
     public void clickaway(){
