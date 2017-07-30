@@ -3,6 +3,7 @@ package com.example.nimesha.delivery;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
@@ -10,6 +11,7 @@ import android.widget.Button;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
@@ -32,8 +34,6 @@ public class SecondActivity extends AppCompatActivity {
 
     FirebaseDatabase database = FirebaseDatabase.getInstance();
     DatabaseReference myRef = database.getReference().child("curjobs");
-    //DatabaseReference latitude = database.getReference("lat");
-    //DatabaseReference longitude = database.getReference("long");
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -83,10 +83,10 @@ public class SecondActivity extends AppCompatActivity {
                 final List<String> jobs = new ArrayList<String>(); //get all the children of the curjob table
                 int count=0;
                 for (DataSnapshot jobSnap: dataSnapshot.getChildren()) {
-
+                    String key = jobSnap.getKey();
                     Double lat = jobSnap.child("lat").getValue(Double.TYPE);
                     Double longi =jobSnap.child("long").getValue(Double.TYPE);
-                    Log.d(TAG, lat+" "+longi);
+                    Log.d(TAG, key + " " + lat + " " + longi);
 
                     RadioButton radioButton = new RadioButton(SecondActivity.this);
                     radioButton.setLayoutParams
@@ -107,6 +107,27 @@ public class SecondActivity extends AppCompatActivity {
                 Log.w(TAG, "Failed to read value.", error.toException());
             }
         });
+    }
+
+    private Boolean exit = false;
+
+    @Override
+    public void onBackPressed() {
+        if (exit) {
+            finish(); // finish activity
+        } else {
+            Toast.makeText(this, "Press Back again to Exit.",
+                    Toast.LENGTH_SHORT).show();
+            exit = true;
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    exit = false;
+                }
+            }, 3 * 1000);
+
+        }
+
     }
 
     public void clickaway(){
