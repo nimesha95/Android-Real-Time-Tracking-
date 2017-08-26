@@ -23,6 +23,7 @@ public class MainActivity extends AppCompatActivity {
 
     private FirebaseAuth mAuth;
     private FirebaseAuth.AuthStateListener mAuthListener;
+    private Boolean exit = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,7 +43,7 @@ public class MainActivity extends AppCompatActivity {
                 FirebaseUser user = firebaseAuth.getCurrentUser();
                 if (user != null) { //goes to second activity if user is already logged in
 
-                    Intent intent = new Intent(MainActivity.this, SecondActivity.class);
+                    Intent intent = new Intent(MainActivity.this, Landing.class);
                     startActivity(intent);
 
                     Log.d(TAG, "onAuthStateChanged:signed_in:" + user.getUid());
@@ -79,8 +80,6 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private Boolean exit = false;
-
     @Override
     public void onBackPressed() {
         if (exit) {
@@ -115,7 +114,7 @@ public class MainActivity extends AppCompatActivity {
                         if (task.isSuccessful()) {
                             // Sign in success, update UI with the signed-in user's information
                             Log.d(TAG, "signInWithEmail:success");
-                            Intent intent = new Intent(MainActivity.this, SecondActivity.class);
+                            Intent intent = new Intent(MainActivity.this, Landing.class);
                             startActivity(intent);
 
                             FirebaseUser user = mAuth.getCurrentUser();
