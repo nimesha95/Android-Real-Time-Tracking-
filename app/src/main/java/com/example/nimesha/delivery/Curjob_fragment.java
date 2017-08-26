@@ -1,17 +1,18 @@
 package com.example.nimesha.delivery;
 
+
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Handler;
-import android.support.v7.app.AppCompatActivity;
+import android.support.v4.app.Fragment;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
@@ -23,7 +24,11 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SecondActivity extends AppCompatActivity {
+
+/**
+ * A simple {@link Fragment} subclass.
+ */
+public class Curjob_fragment extends Fragment {
 
     private static final String TAG = "Database1";
 
@@ -34,24 +39,33 @@ public class SecondActivity extends AppCompatActivity {
     RadioGroup radiogroup;
     FirebaseDatabase database = FirebaseDatabase.getInstance();
     DatabaseReference myRef = database.getReference().child("curjobs");
-    private Boolean exit = false;
+
+    public Curjob_fragment() {
+        // Required empty public constructor
+    }
+
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_second);
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        // Inflate the layout for this fragment
+        return inflater.inflate(R.layout.fragment_curjob_fragment, container, false);
+    }
 
-        radiogroup = (RadioGroup) findViewById(R.id.radioGrp);
-        text1 = (TextView) findViewById(R.id.textView1);
-        Button naviagteBtn=(Button) findViewById(R.id.naviBtn);
-        Button signoutbtn = (Button) findViewById(R.id.signoutbtn);
+
+    @Override
+    public void onViewCreated(View view, Bundle savedInstanceState) {
+
+
+        radiogroup = (RadioGroup) view.findViewById(R.id.radioGrp);
+        text1 = (TextView) view.findViewById(R.id.textView1);
+        Button naviagteBtn = (Button) view.findViewById(R.id.naviBtn);
+        Button signoutbtn = (Button) view.findViewById(R.id.signoutbtn);
 
         naviagteBtn.setOnClickListener(
                 new Button.OnClickListener() {
                     public void onClick(View v) {
-                        // clickaway();
-                        Intent intent = new Intent(SecondActivity.this, Landing.class);
-                        startActivity(intent);
+                        clickaway();
                     }
                 }
         );
@@ -61,7 +75,7 @@ public class SecondActivity extends AppCompatActivity {
                     public void onClick(View v) {
                         FirebaseAuth.getInstance().signOut();
                         Log.d(TAG, "User signed out");
-                        Intent intent = new Intent(SecondActivity.this, MainActivity.class);
+                        Intent intent = new Intent(getActivity(), MainActivity.class);
                         startActivity(intent);
                     }
                 }
@@ -70,7 +84,7 @@ public class SecondActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onStart(){
+    public void onStart() {
         super.onStart();
 
         myRef.addValueEventListener(new ValueEventListener() {
@@ -83,14 +97,14 @@ public class SecondActivity extends AppCompatActivity {
                 radiogroup.removeAllViews();
 
                 final List<String> jobs = new ArrayList<String>(); //get all the children of the curjob table
-                int count=0;
-                for (DataSnapshot jobSnap: dataSnapshot.getChildren()) {
+                int count = 0;
+                for (DataSnapshot jobSnap : dataSnapshot.getChildren()) {
                     String key = jobSnap.getKey();
                     Double lat = jobSnap.child("lat").getValue(Double.TYPE);
-                    Double longi =jobSnap.child("long").getValue(Double.TYPE);
+                    Double longi = jobSnap.child("long").getValue(Double.TYPE);
                     Log.d(TAG, key + " " + lat + " " + longi);
 
-                    RadioButton radioButton = new RadioButton(SecondActivity.this);
+                    RadioButton radioButton = new RadioButton(getActivity());
                     radioButton.setLayoutParams
                             (new RadioGroup.LayoutParams
                                     (RadioGroup.LayoutParams.WRAP_CONTENT, RadioGroup.LayoutParams.WRAP_CONTENT));
@@ -99,7 +113,7 @@ public class SecondActivity extends AppCompatActivity {
 
                     //add it to the group.
                     radiogroup.addView(radioButton, count);
-                    count += 1 ;
+                    count += 1;
                 }
             }
 
@@ -111,30 +125,12 @@ public class SecondActivity extends AppCompatActivity {
         });
     }
 
-    @Override
-    public void onBackPressed() {
-        if (exit) {
-            finish(); // finish activity
-        } else {
-            Toast.makeText(this, "Press Back again to Exit.",
-                    Toast.LENGTH_SHORT).show();
-            exit = true;
-            new Handler().postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    exit = false;
-                }
-            }, 3 * 1000);
-
-        }
-
-    }
-
-    public void clickaway(){
+    public void clickaway() {
         Intent intent = new Intent(android.content.Intent.ACTION_VIEW,
-                Uri.parse("google.navigation:q="+lati+","+longi));
+                Uri.parse("google.navigation:q=" + lati + "," + longi));
         startActivity(intent);
-        Log.d(TAG,lati+" "+longi);
+        Log.d(TAG, lati + " " + longi);
     }
 
 }
+
