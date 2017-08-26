@@ -22,7 +22,6 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
-import java.util.List;
 
 
 /**
@@ -33,8 +32,7 @@ public class Curjob_fragment extends Fragment {
     private static final String TAG = "Database1";
 
     TextView text1;
-    Double lati;
-    Double longi;
+    ArrayList<JobClass> jobList = new ArrayList<JobClass>();    //this list used to save the keys that getting from the database
 
     RadioGroup radiogroup;
     FirebaseDatabase database = FirebaseDatabase.getInstance();
@@ -65,7 +63,15 @@ public class Curjob_fragment extends Fragment {
         naviagteBtn.setOnClickListener(
                 new Button.OnClickListener() {
                     public void onClick(View v) {
-                        clickaway();
+                        int selectedId = radiogroup.getCheckedRadioButtonId();
+
+                        JobClass selectedJob = jobList.get(selectedId);
+                        Double lati = selectedJob.getLat();
+                        Double longi = selectedJob.getLongi();
+                        Log.d("count1", "" + selectedJob.getKey() + " " + lati + " " + longi);
+                        Intent intent = new Intent(getActivity(), Testing.class);
+                        startActivity(intent);
+                        //clickaway(lati,longi);
                     }
                 }
         );
@@ -96,7 +102,8 @@ public class Curjob_fragment extends Fragment {
                 radiogroup.clearCheck();    //this clears the radiogroup everytime datachanges to that it don't duplicate
                 radiogroup.removeAllViews();
 
-                final List<String> jobs = new ArrayList<String>(); //get all the children of the curjob table
+                long x = dataSnapshot.getChildrenCount();
+
                 int count = 0;
                 for (DataSnapshot jobSnap : dataSnapshot.getChildren()) {
                     String key = jobSnap.getKey();
@@ -104,16 +111,22 @@ public class Curjob_fragment extends Fragment {
                     Double longi = jobSnap.child("long").getValue(Double.TYPE);
                     Log.d(TAG, key + " " + lat + " " + longi);
 
+                    JobClass job = new JobClass(key, lat, longi);
+
+                    jobList.add(job);   //adding job object to a list
+
                     RadioButton radioButton = new RadioButton(getActivity());
                     radioButton.setLayoutParams
                             (new RadioGroup.LayoutParams
                                     (RadioGroup.LayoutParams.WRAP_CONTENT, RadioGroup.LayoutParams.WRAP_CONTENT));
                     radioButton.setText("Radio Button #" + lat);
+                    Log.d("count", "" + jobList.get(count));
                     radioButton.setId(count);
 
                     //add it to the group.
                     radiogroup.addView(radioButton, count);
                     count += 1;
+
                 }
             }
 
@@ -125,7 +138,8 @@ public class Curjob_fragment extends Fragment {
         });
     }
 
-    public void clickaway() {
+    public void clickaway(Double lati, Double longi) {
+
         Intent intent = new Intent(android.content.Intent.ACTION_VIEW,
                 Uri.parse("google.navigation:q=" + lati + "," + longi));
         startActivity(intent);
