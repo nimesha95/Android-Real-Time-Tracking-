@@ -3,8 +3,7 @@
     package="com.example.nimesha.delivery">
 
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
-
-    <service android:name="com.mapbox.mapboxsdk.telemetry.TelemetryService" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
 
     <application
         android:allowBackup="true"
@@ -28,7 +27,14 @@
         <activity
             android:name=".Landing"
             android:label="@string/title_activity_landing"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar"></activity>
-    </application>
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
+        <activity
+            android:name=".Testing"
+            android:label="@string/title_activity_testing"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
 
+        <service
+            android:name=".LocationService"
+            android:process=":my_service" />
+    </application>
 </manifest>
