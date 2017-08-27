@@ -32,10 +32,6 @@ public class LocationService extends Service implements LocationListener {
 
         Toast.makeText(getApplicationContext(), "Location Service starts", Toast.LENGTH_SHORT).show();
 
-/*
-        FirebaseDatabase database = FirebaseDatabase.getInstance();
-        DatabaseReference myRef = database.getReference().child("curjobs");
-*/
     }
 
 
@@ -125,14 +121,19 @@ public class LocationService extends Service implements LocationListener {
 
         Double lat = loc.getLatitude();
         Double lon = loc.getLongitude();
-        Log.d("loca1", "" + lat + " " + lon);
+
+        Log.d("GPSloc", "" + lat + " " + lon);
         Toast.makeText(getApplicationContext(), "Latitude = " + lat + "\nLongitude = " + lon, Toast.LENGTH_SHORT).show();
 
-        /*
-        myRef.child(s).child("curLat").setValue(lat);
-        myRef.child(s).child("curLong").setValue(lon);
-*/
-        //    new UpdateLatitudeLongitude(LocationService.this, lat, lon,).execute();
+        Intent i = new Intent("loc");
+        Bundle bundle = new Bundle();
+        bundle.putDouble("lat", lat);
+        bundle.putDouble("lon", lon);
+        i.putExtras(bundle);
+        sendBroadcast(i);
+
+
+        //   new UpdateLatitudeLongitude(LocationService.this, lat, lon,).execute();
 
 //Calling AsyncTask for upload latitude and longitude
     }
@@ -151,5 +152,4 @@ public class LocationService extends Service implements LocationListener {
     public void onProviderDisabled(String provider) {
 
     }
-
 }

@@ -30,8 +30,8 @@ import java.util.ArrayList;
 public class Curjob_fragment extends Fragment {
 
     private static final String TAG = "Database1";
-    public static FirebaseDatabase database = FirebaseDatabase.getInstance();
-    public static DatabaseReference myRef = database.getReference().child("curjobs");
+    FirebaseDatabase database = FirebaseDatabase.getInstance();
+    DatabaseReference myRef = database.getReference().child("curjobs");
     TextView text1;
     ArrayList<JobClass> jobList = new ArrayList<JobClass>();    //this list used to save the keys that getting from the database
     RadioGroup radiogroup;
