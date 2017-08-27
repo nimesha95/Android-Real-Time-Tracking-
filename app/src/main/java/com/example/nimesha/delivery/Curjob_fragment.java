@@ -30,13 +30,11 @@ import java.util.ArrayList;
 public class Curjob_fragment extends Fragment {
 
     private static final String TAG = "Database1";
-
+    public static FirebaseDatabase database = FirebaseDatabase.getInstance();
+    public static DatabaseReference myRef = database.getReference().child("curjobs");
     TextView text1;
     ArrayList<JobClass> jobList = new ArrayList<JobClass>();    //this list used to save the keys that getting from the database
-
     RadioGroup radiogroup;
-    FirebaseDatabase database = FirebaseDatabase.getInstance();
-    DatabaseReference myRef = database.getReference().child("curjobs");
 
     public Curjob_fragment() {
         // Required empty public constructor
@@ -68,8 +66,11 @@ public class Curjob_fragment extends Fragment {
                         JobClass selectedJob = jobList.get(selectedId);
                         Double lati = selectedJob.getLat();
                         Double longi = selectedJob.getLongi();
-                        Log.d("count1", "" + selectedJob.getKey() + " " + lati + " " + longi);
+                        String selected = selectedJob.getKey();
+                        Log.d("jobX", "" + selected + " " + lati + " " + longi);
+
                         Intent intent = new Intent(getActivity(), Testing.class);
+                        intent.putExtra("selectedJob", selected);
                         startActivity(intent);
                         //clickaway(lati,longi);
                     }
