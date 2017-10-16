@@ -15,8 +15,9 @@ public class JobClass {
     private String itemCatagories;
     private Long contactNo;
     private Long timestamp;
+    private String orderID;
 
-    public JobClass(String key, Double lat, Double longi, String custname, String address, String itemCatagories, Long contactNo, Long timestamp) {
+    public JobClass(String key, Double lat, Double longi, String custname, String address, String itemCatagories, Long contactNo, Long timestamp, String orderID) {
         this.key = key;
         this.lat = lat;
         this.longi = longi;
@@ -25,12 +26,21 @@ public class JobClass {
         this.itemCatagories = itemCatagories;
         this.contactNo = contactNo;
         this.timestamp = timestamp;
+        this.orderID = orderID;
     }
 
     JobClass(String key, Double lat, Double longi) {
         this.key = key;
         this.lat = lat;
         this.longi = longi;
+    }
+
+    public String getOrderID() {
+        return orderID;
+    }
+
+    public void setOrderID(String orderID) {
+        this.orderID = orderID;
     }
 
     public String getKey() {

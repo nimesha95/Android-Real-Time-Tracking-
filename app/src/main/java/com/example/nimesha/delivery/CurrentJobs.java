@@ -63,10 +63,11 @@ public class CurrentJobs extends AppCompatActivity {
                     String itemCatagories = (String) jobSnap.child("itemCatagory").getValue();
                     Long contactNo = (Long) jobSnap.child("contactNo").getValue();
                     Long timestamp = (Long) jobSnap.child("timestamp").getValue();
+                    String orderID = (String) jobSnap.child("orderID").getValue();
 
                     Log.d(TAG, key + " " + lat + " " + longi);
 
-                    JobClass job = new JobClass(key, lat, longi, custname, address, itemCatagories, contactNo, timestamp);
+                    JobClass job = new JobClass(key, lat, longi, custname, address, itemCatagories, contactNo, timestamp, orderID);
 
                     JobListClass.jobList.add(job);   //adding job object to a list
 /*
