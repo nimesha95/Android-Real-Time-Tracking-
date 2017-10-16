@@ -12,7 +12,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".SplashActivity">
+        <activity
+            android:name=".SplashActivity"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -21,14 +23,13 @@
         </activity>
         <activity
             android:name=".MainActivity"
-            android:noHistory="true"></activity>
+            android:noHistory="true" />
         <activity
             android:name=".SecondActivity"
             android:noHistory="true" />
         <activity
             android:name=".Landing"
-            android:label="@string/title_activity_landing"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
+            android:label="@string/title_activity_landing" />
         <activity
             android:name=".Testing"
             android:label="@string/title_activity_testing"
@@ -40,7 +41,7 @@
 
         <activity android:name=".decision_point" />
         <activity android:name=".CurrentJobs" />
-
+        <activity android:name=".JobInfo"></activity>
     </application>
 
 </manifest>
