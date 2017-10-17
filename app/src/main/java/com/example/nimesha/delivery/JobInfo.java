@@ -8,19 +8,28 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 import java.sql.Date;
 import java.text.SimpleDateFormat;
 
+import static com.example.nimesha.delivery.R.id.map;
 import static java.sql.Types.TIMESTAMP;
 
-public class JobInfo extends AppCompatActivity {
+public class JobInfo extends AppCompatActivity implements OnMapReadyCallback {
 
     TextView orderid;
     TextView customername;
@@ -31,15 +40,37 @@ public class JobInfo extends AppCompatActivity {
 
     Button getNavi;
 
+    ScrollView mainScrollView;
+
     JobClass selectedJob;
 
     FirebaseDatabase database = FirebaseDatabase.getInstance();
     DatabaseReference myRef = database.getReference().child("curjobs");
 
     @Override
+    public void onMapReady(GoogleMap googleMap) {
+        // Add a marker in Sydney, Australia,
+        // and move the map's camera to the same location.
+        LatLng pos = new LatLng(selectedJob.getLat(), selectedJob.getLongi());
+        googleMap.addMarker(new MarkerOptions().position(pos)
+                .title("Location"));
+        googleMap.moveCamera(CameraUpdateFactory.newLatLng(pos));
+        googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(pos,15));
+    }
+    
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_job_info);
+
+        mainScrollView = (ScrollView) findViewById(R.id.scrollviewInfo);
+
+        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
+                .findFragmentById(map);
+        mapFragment.getMapAsync(this);
+
+
 
         orderid = (TextView) findViewById(R.id.orderid);
         customername = (TextView) findViewById(R.id.customername);
