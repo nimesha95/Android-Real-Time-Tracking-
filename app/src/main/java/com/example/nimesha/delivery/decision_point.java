@@ -24,7 +24,7 @@ public class decision_point extends AppCompatActivity {
         CurJobBtn.setOnClickListener(
                 new Button.OnClickListener() {
                     public void onClick(View v) {
-                        Intent intent = new Intent(decision_point.this, CurrentJobs.class);
+                        Intent intent = new Intent(decision_point.this, MapboxActivity.class);
                         startActivity(intent);
 
                     }
