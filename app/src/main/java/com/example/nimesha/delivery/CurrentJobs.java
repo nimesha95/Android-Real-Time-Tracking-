@@ -37,9 +37,9 @@ public class CurrentJobs extends AppCompatActivity {
         setContentView(R.layout.activity_current_jobs_new);
 
         radiogroup = (RadioGroup) findViewById(R.id.radioGrp);
-        text1 = (TextView) findViewById(R.id.textView1);
+        // text1 = (TextView) findViewById(R.id.textView1);
         Button naviagteBtn = (Button) findViewById(R.id.naviBtn);
-        Button signoutbtn = (Button) findViewById(R.id.signoutbtn);
+        //Button signoutbtn = (Button) findViewById(R.id.signoutbtn);
 
 
         radiogroup.clearCheck();    //this clears the radiogroup everytime datachanges to that it don't duplicate

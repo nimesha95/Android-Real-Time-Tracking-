@@ -71,22 +71,8 @@ public class LocationService extends Service implements LocationListener {
     @Override
     public void onDestroy() {
         super.onDestroy();
+        this.m_locationManager.removeUpdates(this);
         Toast.makeText(getApplicationContext(), "Service Task destroyed", Toast.LENGTH_LONG).show();
-        Intent myIntent = new Intent(getApplicationContext(), LocationService.class);
-
-        PendingIntent pendingIntent = PendingIntent.getService(getApplicationContext(), 0, myIntent, 0);
-
-        AlarmManager alarmManager1 = (AlarmManager) getSystemService(ALARM_SERVICE);
-
-        Calendar calendar = Calendar.getInstance();
-
-        calendar.setTimeInMillis(System.currentTimeMillis());
-
-        calendar.add(Calendar.SECOND, 10);
-
-        alarmManager1.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
-
-        Toast.makeText(getApplicationContext(), "Start Alarm", Toast.LENGTH_SHORT).show();
     }
 
 
@@ -94,23 +80,7 @@ public class LocationService extends Service implements LocationListener {
     @Override
     public void onTaskRemoved(Intent rootIntent) {
         super.onTaskRemoved(rootIntent);
-        Intent myIntent = new Intent(getApplicationContext(), LocationService.class);
-
-        PendingIntent pendingIntent = PendingIntent.getService(getApplicationContext(), 0, myIntent, 0);
-
-        AlarmManager alarmManager1 = (AlarmManager) getSystemService(ALARM_SERVICE);
-
-        Calendar calendar = Calendar.getInstance();
-
-        calendar.setTimeInMillis(System.currentTimeMillis());
-
-        calendar.add(Calendar.SECOND, 10);
-
-        alarmManager1.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
-
-        Toast.makeText(getApplicationContext(), "Start Alarm", Toast.LENGTH_SHORT).show();
-
-
+        this.m_locationManager.removeUpdates(this);
     }
 
 

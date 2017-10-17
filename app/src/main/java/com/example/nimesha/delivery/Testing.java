@@ -17,13 +17,12 @@ import com.google.firebase.database.FirebaseDatabase;
 
 public class Testing extends AppCompatActivity {
 
-    public static String s;
+    public String s;
     FirebaseDatabase database = FirebaseDatabase.getInstance();
     DatabaseReference myRef = database.getReference().child("curjobs");
 
-    public static void justFunc() {
-        // Log.d("GPSloc","lat: "+LocationService.lat+" long: "+LocationService.lon);
-    }
+    Button stopBtn;
+    Button chk;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,22 +31,25 @@ public class Testing extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        Button chk = (Button) findViewById(R.id.stat_btn);
+        chk = (Button) findViewById(R.id.stat_btn);
+        stopBtn = (Button) findViewById(R.id.stop_btn);
 
         chk.setOnClickListener(
                 new Button.OnClickListener() {
                     public void onClick(View v) {
-                        justFunc();
+                        StartService();
                     }
                 }
         );
 
+        stopBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                StopService();
+            }
+        });
+
         s = getIntent().getStringExtra("selectedJob");
-
-        startService(new Intent(this, LocationService.class));
-
-        newMessage messageReceiver = new newMessage();
-        registerReceiver(messageReceiver, new IntentFilter("loc"));
 
         //Log.d("jobX", "selected job: " + s + " curLat" + LocationService.lat + " curLon" + LocationService.lon);
     }
@@ -64,4 +66,17 @@ public class Testing extends AppCompatActivity {
             myRef.child(s).child("curLong").setValue(longi);
         }
     }
+
+    public void StartService() {
+        startService(new Intent(this, LocationService.class));
+        newMessage messageReceiver = new newMessage();
+        registerReceiver(messageReceiver, new IntentFilter("loc"));
+
+    }
+
+    public void StopService() {
+        stopService(new Intent(this, LocationService.class));
+        // Log.d("GPSloc","lat: "+LocationService.lat+" long: "+LocationService.lon);
+    }
+
 }

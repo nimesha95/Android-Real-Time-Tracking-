@@ -22,14 +22,34 @@
 
     <include
         android:id="@+id/include"
-        layout="@layout/content_testing" />
+        layout="@layout/content_testing"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginRight="37dp"
+        android:layout_marginEnd="37dp" />
 
     <Button
         android:id="@+id/stat_btn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
+        android:text="ClickMe"
+        android:layout_marginLeft="68dp"
+        android:layout_marginStart="68dp"
+        android:layout_alignBaseline="@+id/stop_btn"
+        android:layout_alignBottom="@+id/stop_btn"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
+
+    <Button
+        android:id="@+id/stop_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Stop Service"
+        android:layout_marginRight="30dp"
+        android:layout_marginEnd="30dp"
         android:layout_centerVertical="true"
-        android:text="ClickMe" />
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true" />
 
 </RelativeLayout>
