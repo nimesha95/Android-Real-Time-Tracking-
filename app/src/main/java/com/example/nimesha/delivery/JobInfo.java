@@ -1,8 +1,11 @@
 package com.example.nimesha.delivery;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 
 import java.sql.Date;
@@ -19,6 +22,8 @@ public class JobInfo extends AppCompatActivity {
     TextView added;
     TextView remarkes;
 
+    Button getNavi;
+
     JobClass selectedJob;
 
     @Override
@@ -32,6 +37,7 @@ public class JobInfo extends AppCompatActivity {
         mobile = (TextView) findViewById(R.id.mobile);
         added = (TextView) findViewById(R.id.added);
         remarkes = (TextView) findViewById(R.id.remarkes);
+        getNavi = (Button) findViewById(R.id.getNavi);
 
         int s = getIntent().getIntExtra("selectedJob", 0);
 
@@ -47,5 +53,13 @@ public class JobInfo extends AppCompatActivity {
         added.setText(dateString);
 
         remarkes.setText(selectedJob.getItemCatagories());
+
+        getNavi.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(JobInfo.this, MapboxActivity.class);
+                startActivity(intent);
+            }
+        });
     }
 }

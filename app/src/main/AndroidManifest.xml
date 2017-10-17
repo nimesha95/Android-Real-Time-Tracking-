@@ -41,7 +41,8 @@
 
         <activity android:name=".decision_point" />
         <activity android:name=".CurrentJobs" />
-        <activity android:name=".JobInfo"></activity>
+        <activity android:name=".JobInfo" />
+        <activity android:name=".MapboxActivity"></activity>
     </application>
 
 </manifest>
