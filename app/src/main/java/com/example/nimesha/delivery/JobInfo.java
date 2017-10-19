@@ -4,6 +4,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -14,6 +15,7 @@ import android.widget.Button;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
+import com.gitonway.lee.niftymodaldialogeffects.lib.NiftyDialogBuilder;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -42,6 +44,8 @@ public class JobInfo extends AppCompatActivity implements OnMapReadyCallback {
 
     ScrollView mainScrollView;
 
+    SharedPreferences prefs;
+
     JobClass selectedJob;
 
     FirebaseDatabase database = FirebaseDatabase.getInstance();
@@ -57,7 +61,7 @@ public class JobInfo extends AppCompatActivity implements OnMapReadyCallback {
         googleMap.moveCamera(CameraUpdateFactory.newLatLng(pos));
         googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(pos,15));
     }
-    
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -93,18 +97,76 @@ public class JobInfo extends AppCompatActivity implements OnMapReadyCallback {
         String dateString = formatter.format(new Date(selectedJob.getTimestamp()));
         added.setText(dateString);
 
+        prefs = getSharedPreferences("delivery", MODE_PRIVATE);
+        String status = prefs.getString("curJob", "no");
+        if (status.equals("yes")) {
+            NiftyDialogBuilder dialogBuilder = NiftyDialogBuilder.getInstance(JobInfo.this);
+
+            dialogBuilder
+                    .withTitle("current JOB")                                  //.withTitle(null)  no title
+                    .withTitleColor("#FFFFFF")                                  //def
+                    .withDividerColor("#11000000")                              //def
+                    .withMessage("Is the delivery complete?")                     //.withMessage(null)  no Msg
+                    .withMessageColor("#FFFFFFFF")                              //def  | withMessageColor(int resid)
+                    .withDialogColor("#FFE74C3C")                               //def  | withDialogColor(int resid)
+                    .isCancelableOnTouchOutside(false)
+                    .withButton1Text("YES")                                      //def gone
+                    .setButton1Click(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            JobCompletion();
+                        }
+                    })
+                    .show();
+        }
+
         remarkes.setText(selectedJob.getItemCatagories());
 
         getNavi.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 StartService();
+
+                SharedPreferences.Editor editor = prefs.edit();
+                editor.putString("curJob", "yes");
+                editor.putString("jobKey", selectedJob.getKey());
+                editor.commit();
+
                 OpenMaps(selectedJob.getLat(), selectedJob.getLongi());
                 //Intent intent = new Intent(JobInfo.this, Testing.class);
                 //intent.putExtra("selectedJob", selectedJob.getKey());
                 //startActivity(intent);
             }
         });
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        prefs = getSharedPreferences("delivery", MODE_PRIVATE);
+        String status = prefs.getString("curJob", "no");
+        if (status.equals("yes")) {
+            NiftyDialogBuilder dialogBuilder = NiftyDialogBuilder.getInstance(JobInfo.this);
+
+            dialogBuilder
+                    .withTitle("current JOB")                                  //.withTitle(null)  no title
+                    .withTitleColor("#FFFFFF")                                  //def
+                    .withDividerColor("#11000000")                              //def
+                    .withMessage("Is this delivery complete?")                     //.withMessage(null)  no Msg
+                    .withMessageColor("#FFFFFFFF")                              //def  | withMessageColor(int resid)
+                    .withDialogColor("#FFE74C3C")                               //def  | withDialogColor(int resid)
+                    .isCancelableOnTouchOutside(false)
+                    .withButton1Text("YES")                                      //def gone
+                    .setButton1Click(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            JobCompletion();
+                        }
+                    })
+                    .show();
+        }
+
     }
 
     @Override
@@ -125,6 +187,19 @@ public class JobInfo extends AppCompatActivity implements OnMapReadyCallback {
             myRef.child(selectedJob.getKey()).child("curLat").setValue(lati);
             myRef.child(selectedJob.getKey()).child("curLong").setValue(longi);
         }
+    }
+
+    public void JobCompletion() {
+        SharedPreferences.Editor editor = prefs.edit();
+        editor.putString("curJob", "no");
+        editor.commit();
+
+        myRef.child(prefs.getString("jobKey", "null")).child("completed").setValue("yes");      //update firebase database as completed
+
+        StopService();      //stops the location background service
+
+        Intent intent = new Intent(JobInfo.this, CurrentJobs.class);
+        startActivity(intent);
     }
 
     public void StartService() {

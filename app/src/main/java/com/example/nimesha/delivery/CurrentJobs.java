@@ -1,6 +1,7 @@
 package com.example.nimesha.delivery;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -11,6 +12,7 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 
+import com.google.firebase.crash.FirebaseCrash;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -31,10 +33,14 @@ public class CurrentJobs extends AppCompatActivity {
     TextView text1;
     RadioGroup radiogroup;
 
+    SharedPreferences prefs;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_current_jobs_new);
+
+        //FirebaseCrash.log("Activity created");
 
         radiogroup = (RadioGroup) findViewById(R.id.radioGrp);
         // text1 = (TextView) findViewById(R.id.textView1);
@@ -44,6 +50,10 @@ public class CurrentJobs extends AppCompatActivity {
 
         radiogroup.clearCheck();    //this clears the radiogroup everytime datachanges to that it don't duplicate
         radiogroup.removeAllViews();
+
+        prefs = getSharedPreferences("delivery", MODE_PRIVATE);
+        String status = prefs.getString("curJob", "no");
+        Log.d("statusX", status);
 
         myRef.addValueEventListener(new ValueEventListener() {
             @Override
@@ -145,6 +155,7 @@ public class CurrentJobs extends AppCompatActivity {
         );
 
     }
+
 
     @Override
     public void onStart() {
