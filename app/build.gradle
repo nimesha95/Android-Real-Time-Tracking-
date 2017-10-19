@@ -31,16 +31,6 @@ dependencies {
 
 
 
-
-
-
-    compile('com.mapbox.mapboxsdk:mapbox-android-sdk:5.2.0-beta.1@aar') {
-        transitive = true
-    }
-    compile('com.mapbox.mapboxsdk:mapbox-android-navigation-ui:0.6.1') {
-        transitive = true
-    }
-
     compile 'com.android.support:appcompat-v7:26.0.1'
     compile 'com.android.support.constraint:constraint-layout:1.0.2'
     compile 'com.google.firebase:firebase-auth:10.0.1'
@@ -50,7 +40,6 @@ dependencies {
     compile 'com.android.support:design:26.0.1'
     compile 'com.android.support:support-v4:26.0.1'
     compile 'com.github.sd6352051:NiftyDialogEffects:1.0.0'
-    compile 'com.mapbox.mapboxsdk:mapbox-android-navigation:0.6.1'
     compile 'com.google.firebase:firebase-crash:10.0.1'
     testCompile 'junit:junit:4.12'
 }
