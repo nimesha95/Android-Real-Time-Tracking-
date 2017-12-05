@@ -22,6 +22,7 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.Collections;
 import java.util.Comparator;
 
+import static android.R.attr.key;
 import static com.example.nimesha.delivery.JobListClass.jobList;
 
 
@@ -58,13 +59,14 @@ public class CurrentJobs extends AppCompatActivity {
         myRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
+                radiogroup.clearCheck();    //this clears the radiogroup everytime datachanges to that it don't duplicate
+                radiogroup.removeAllViews();
                 // This method is called once with the initial value and again
                 // whenever data at this location is updated.
 
                 long x = dataSnapshot.getChildrenCount();
                 jobList.clear();    //this clears the list.. so it's repopuated again when data changes
                 for (DataSnapshot jobSnap : dataSnapshot.getChildren()) {
-
                     String key = jobSnap.getKey();
                     Double lat = jobSnap.child("lat").getValue(Double.TYPE);
                     Double longi = jobSnap.child("long").getValue(Double.TYPE);
@@ -74,26 +76,18 @@ public class CurrentJobs extends AppCompatActivity {
                     Long contactNo = (Long) jobSnap.child("contactNo").getValue();
                     Long timestamp = (Long) jobSnap.child("timestamp").getValue();
                     String orderID = (String) jobSnap.child("orderID").getValue();
+                    String completed = (String) jobSnap.child("completed").getValue();
 
                     Log.d(TAG, key + " " + lat + " " + longi);
 
                     JobClass job = new JobClass(key, lat, longi, custname, address, itemCatagories, contactNo, timestamp, orderID);
 
-                    JobListClass.jobList.add(job);   //adding job object to a list
-/*
-                    RadioButton radioButton = new RadioButton(CurrentJobs.this);
-                    radioButton.setLayoutParams
-                            (new RadioGroup.LayoutParams
-                                    (RadioGroup.LayoutParams.WRAP_CONTENT, RadioGroup.LayoutParams.WRAP_CONTENT));
-                    radioButton.setText("Address: " + address);
-                    Log.d("count", "" + jobList.get(count));
+                    if (completed.equals("yes")) {
+                        JobListHistoryClass.jobHistory.add(job);
+                    } else {
+                        JobListClass.jobList.add(job);   //adding job object to a list
+                    }
 
-                    radioButton.setId(count);
-
-                    //add it to the group.
-                    radiogroup.addView(radioButton, count);
-                    count += 1;
-*/
                 }
 
                 Collections.sort(jobList, new Comparator<JobClass>() {
