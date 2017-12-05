@@ -2,9 +2,8 @@ package com.example.nimesha.delivery;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.net.Uri;
-import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -12,7 +11,6 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 
-import com.google.firebase.crash.FirebaseCrash;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -22,17 +20,14 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.Collections;
 import java.util.Comparator;
 
-import static android.R.attr.key;
 import static com.example.nimesha.delivery.JobListClass.jobList;
 import static com.example.nimesha.delivery.JobListHistoryClass.jobHistory;
 
-
-public class CurrentJobs extends AppCompatActivity {
+public class JobHistory extends AppCompatActivity {
 
     private static final String TAG = "Database1";
     FirebaseDatabase database = FirebaseDatabase.getInstance();
     DatabaseReference myRef = database.getReference().child("curjobs");
-    TextView text1;
     RadioGroup radiogroup;
 
     SharedPreferences prefs;
@@ -40,13 +35,11 @@ public class CurrentJobs extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_current_jobs_new);
-
-        //FirebaseCrash.log("Activity created");
+        setContentView(R.layout.activity_job_history);
 
         radiogroup = (RadioGroup) findViewById(R.id.radioGrp);
         // text1 = (TextView) findViewById(R.id.textView1);
-        Button naviagteBtn = (Button) findViewById(R.id.naviBtn);
+        Button SelectBtn = (Button) findViewById(R.id.SelectBtn);
         //Button signoutbtn = (Button) findViewById(R.id.signoutbtn);
 
 
@@ -65,7 +58,6 @@ public class CurrentJobs extends AppCompatActivity {
                 // This method is called once with the initial value and again
                 // whenever data at this location is updated.
 
-                long x = dataSnapshot.getChildrenCount();
                 jobList.clear();    //this clears the list.. so it's repopuated again when data changes
                 jobHistory.clear();
 
@@ -81,7 +73,6 @@ public class CurrentJobs extends AppCompatActivity {
                     String orderID = (String) jobSnap.child("orderID").getValue();
                     String completed = (String) jobSnap.child("completed").getValue();
                     String compDate = (String) jobSnap.child("comp_date").getValue();
-
                     Log.d(TAG, key + " " + lat + " " + longi);
 
                     JobClass job = new JobClass(key, lat, longi, custname, address, itemCatagories, contactNo, timestamp, orderID, compDate);
@@ -89,12 +80,12 @@ public class CurrentJobs extends AppCompatActivity {
                     if (completed.equals("yes")) {
                         jobHistory.add(job);
                     } else {
-                        JobListClass.jobList.add(job);   //adding job object to a list
+                        jobList.add(job);   //adding job object to a list
                     }
 
                 }
 
-                Collections.sort(jobList, new Comparator<JobClass>() {
+                Collections.sort(jobHistory, new Comparator<JobClass>() {
                     public int compare(JobClass obj1, JobClass obj2) {
                         // ## Ascending order
                         //return obj1.firstName.compareToIgnoreCase(obj2.firstName); // To compare string values
@@ -104,16 +95,16 @@ public class CurrentJobs extends AppCompatActivity {
                 });
 
 
-                Log.d("arrSize", "" + jobList.size());
-                for (int i = 0; i < jobList.size(); i++) {
-                    RadioButton radioButton = new RadioButton(CurrentJobs.this);
+                Log.d("arrSize", "" + jobHistory.size());
+                for (int i = 0; i < jobHistory.size(); i++) {
+                    RadioButton radioButton = new RadioButton(JobHistory.this);
                     radioButton.setLayoutParams
                             (new RadioGroup.LayoutParams
                                     (RadioGroup.LayoutParams.WRAP_CONTENT, RadioGroup.LayoutParams.WRAP_CONTENT));
 
-                    JobClass jb = jobList.get(i);
+                    JobClass jb = jobHistory.get(i);
 
-                    radioButton.setText("Address: " + jb.getAddress());
+                    radioButton.setText("Date: " + jb.getCompDate());
 
 
                     radioButton.setId(i);
@@ -133,25 +124,16 @@ public class CurrentJobs extends AppCompatActivity {
         });
 
 
-        naviagteBtn.setOnClickListener(
+        SelectBtn.setOnClickListener(
                 new Button.OnClickListener() {
                     public void onClick(View v) {
                         int selectedId = radiogroup.getCheckedRadioButtonId();
 
-                        Intent intent = new Intent(CurrentJobs.this, JobInfo.class);
+                        Intent intent = new Intent(JobHistory.this, HistoryView.class);
                         intent.putExtra("selectedJob", selectedId);
                         startActivity(intent);
                     }
                 }
         );
-
     }
-
-
-    @Override
-    public void onStart() {
-        super.onStart();
-
-    }
-
 }

@@ -27,6 +27,7 @@ import com.google.firebase.database.FirebaseDatabase;
 
 import java.sql.Date;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 
 import static com.example.nimesha.delivery.R.id.map;
 import static java.sql.Types.TIMESTAMP;
@@ -194,7 +195,17 @@ public class JobInfo extends AppCompatActivity implements OnMapReadyCallback {
         editor.putString("curJob", "no");
         editor.commit();
 
+
+        Calendar c = Calendar.getInstance();
+        System.out.println("Current time => " + c.getTime());
+
+        SimpleDateFormat df = new SimpleDateFormat("dd-MMM-yyyy");
+        String formattedDate = df.format(c.getTime());
+
+        Log.d("umbaa", formattedDate);
+
         myRef.child(prefs.getString("jobKey", "null")).child("completed").setValue("yes");      //update firebase database as completed
+        myRef.child(prefs.getString("jobKey", "null")).child("comp_date").setValue(formattedDate);
 
         StopService();      //stops the location background service
 

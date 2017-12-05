@@ -16,8 +16,10 @@ public class JobClass {
     private Long contactNo;
     private Long timestamp;
     private String orderID;
+    private String compDate;
 
-    public JobClass(String key, Double lat, Double longi, String custname, String address, String itemCatagories, Long contactNo, Long timestamp, String orderID) {
+
+    public JobClass(String key, Double lat, Double longi, String custname, String address, String itemCatagories, Long contactNo, Long timestamp, String orderID, String compDate) {
         this.key = key;
         this.lat = lat;
         this.longi = longi;
@@ -27,6 +29,8 @@ public class JobClass {
         this.contactNo = contactNo;
         this.timestamp = timestamp;
         this.orderID = orderID;
+        this.compDate = compDate;
+
     }
 
     JobClass(String key, Double lat, Double longi) {
@@ -105,5 +109,13 @@ public class JobClass {
 
     public void setTimestamp(Long timestamp) {
         this.timestamp = timestamp;
+    }
+
+    public String getCompDate() {
+        return compDate;
+    }
+
+    public void setCompDate(String compDate) {
+        this.compDate = compDate;
     }
 }

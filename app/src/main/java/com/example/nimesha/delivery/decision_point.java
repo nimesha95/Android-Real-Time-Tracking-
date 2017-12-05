@@ -12,6 +12,8 @@ public class decision_point extends AppCompatActivity {
 
     Button signoutBtn;
     Button CurJobBtn;
+    Button JobHistoryBtn;
+    Button ProfileBtn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -20,6 +22,8 @@ public class decision_point extends AppCompatActivity {
 
         signoutBtn = (Button) findViewById(R.id.button2);
         CurJobBtn = (Button) findViewById(R.id.CurJobBtn);
+        JobHistoryBtn = (Button) findViewById(R.id.JobHistoryBtn);
+        ProfileBtn = (Button) findViewById(R.id.ProfileBtn);
 
         CurJobBtn.setOnClickListener(
                 new Button.OnClickListener() {
@@ -31,6 +35,25 @@ public class decision_point extends AppCompatActivity {
                 }
         );
 
+        JobHistoryBtn.setOnClickListener(
+                new Button.OnClickListener() {
+                    public void onClick(View v) {
+                        Intent intent = new Intent(decision_point.this, JobHistory.class);
+                        startActivity(intent);
+
+                    }
+                }
+        );
+
+        ProfileBtn.setOnClickListener(
+                new Button.OnClickListener() {
+                    public void onClick(View v) {
+                        Intent intent = new Intent(decision_point.this, Profile.class);
+                        startActivity(intent);
+
+                    }
+                }
+        );
 
         signoutBtn.setOnClickListener(
                 new Button.OnClickListener() {
