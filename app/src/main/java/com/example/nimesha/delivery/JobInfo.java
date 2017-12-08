@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -15,6 +16,10 @@ import android.widget.Button;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
+import com.afollestad.bridge.Bridge;
+import com.afollestad.bridge.BridgeException;
+import com.afollestad.bridge.Request;
+import com.afollestad.bridge.Response;
 import com.gitonway.lee.niftymodaldialogeffects.lib.NiftyDialogBuilder;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -25,11 +30,15 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.sql.Date;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
 import static com.example.nimesha.delivery.R.id.map;
+import static com.example.nimesha.delivery.R.id.username;
 import static java.sql.Types.TIMESTAMP;
 
 public class JobInfo extends AppCompatActivity implements OnMapReadyCallback {
@@ -46,7 +55,7 @@ public class JobInfo extends AppCompatActivity implements OnMapReadyCallback {
     ScrollView mainScrollView;
 
     SharedPreferences prefs;
-
+    JSONObject finalAnswer;
     JobClass selectedJob;
 
     FirebaseDatabase database = FirebaseDatabase.getInstance();
@@ -128,6 +137,21 @@ public class JobInfo extends AppCompatActivity implements OnMapReadyCallback {
             public void onClick(View view) {
                 StartService();
 
+
+                finalAnswer = new JSONObject();
+                try {
+                    //Log.d("stuffhappens",selectedJob.getOrderID());
+                    finalAnswer.put("cur_job_id", selectedJob.getOrderID());
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+                //selectedJob.getOrderID()
+                PostAnotation postAnotation = new PostAnotation();
+                String newUrl = "http://pclife.azurewebsites.net/rest_api";
+                postAnotation.setUrl(newUrl);
+                postAnotation.execute();
+
                 SharedPreferences.Editor editor = prefs.edit();
                 editor.putString("curJob", "yes");
                 editor.putString("jobKey", selectedJob.getKey());
@@ -195,6 +219,20 @@ public class JobInfo extends AppCompatActivity implements OnMapReadyCallback {
         editor.putString("curJob", "no");
         editor.commit();
 
+        finalAnswer = new JSONObject();
+        try {
+            //Log.d("stuffhappens",selectedJob.getOrderID());
+            finalAnswer.put("job_completed", selectedJob.getOrderID());
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        //selectedJob.getOrderID()
+        PostAnotation postAnotation = new PostAnotation();
+        String newUrl = "http://pclife.azurewebsites.net/rest_api";
+        postAnotation.setUrl(newUrl);
+        postAnotation.execute();
+
 
         Calendar c = Calendar.getInstance();
         System.out.println("Current time => " + c.getTime());
@@ -231,4 +269,63 @@ public class JobInfo extends AppCompatActivity implements OnMapReadyCallback {
                 Uri.parse("google.navigation:q=" + lati + "," + longi));
         startActivity(intent);
     }
+
+
+    public class PostAnotation extends AsyncTask<Void, Void, String> {
+        String url;
+        String response = null;
+
+
+        public String setUrl(String url) {
+            try {
+                this.url = url;
+                return "successfully set";
+
+
+            } catch (Exception e) {
+                return new String("Exception: " + e.getMessage());
+            }
+        }
+
+        protected void onPreExecute() {
+        }
+
+        protected String doInBackground(Void... voids) {
+            Request requestX = null;
+
+            try {
+                requestX = Bridge
+                        .post(url)
+                        .body(finalAnswer)
+                        .request();
+            } catch (BridgeException e) {
+                e.printStackTrace();
+            }
+
+            Response responseX = requestX.response();
+            if (responseX.isSuccess()) {
+                // Request returned HTTP status 200-300
+                responseX.asString();
+                //Log.d("stuffhappens", responseX.asString());
+            } else {
+                // Request returned an HTTP error status
+                // Log.d("stuffhappens", responseX.asString());
+
+            }
+            return responseX.asString();
+        }
+
+        @Override
+        protected void onPostExecute(String result) {
+            try {
+            } catch (Exception e) {
+                //Log.d("AnswerSent", "failed to sent");
+            }
+
+            //Log.d("SendingReport", result);
+
+        }
+
+    }
+
 }

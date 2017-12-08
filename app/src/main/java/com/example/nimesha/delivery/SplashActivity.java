@@ -8,7 +8,7 @@ import android.view.WindowManager;
 
 public class SplashActivity extends AppCompatActivity {
 
-    private static int TIME_OUT = 4; //Time to launch the another activity
+    private static int TIME_OUT = 400; //Time to launch the another activity
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
