@@ -319,7 +319,7 @@ public class JobInfo extends AppCompatActivity implements OnMapReadyCallback {
         protected void onPostExecute(String result) {
             try {
             } catch (Exception e) {
-                //Log.d("AnswerSent", "failed to sent");
+                //("AnswerSent", "failed to sent");
             }
 
             //Log.d("SendingReport", result);
